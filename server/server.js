@@ -8,6 +8,7 @@ var {ObjectID} = require('mongodb');
 var {mongoose} = require('./db/mongoose');
 var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
+var {authenticate} = require('./middleware/authenticate');
 
 var app = express();
 
@@ -111,43 +112,16 @@ app.post('/users', (req, res) => {
     })
 });
 
+
+app.get('/users/me', authenticate, (req, res) => {
+    var token = req.header('x-auth');
+    res.send(req.user);
+});
+
+
 app.listen(port, () => {
   console.log(`Started on port ${port}`);
 });
 
 module.exports = {app};
 
-
-
-// var newUser = new User({
-//   email: "annafoldvari@gmx.co.uk"
-// });
-
-// newUser.save().then((doc) => {
-//   console.log("Saved user", doc)
-// }, (e) => {
-//   console.log("Unable to save user.", (e))
-// });
-
-// var newTodo = new Todo({
-//   text: "Cook dinner"
-// });
-
-
-// newTodo.save().then((doc) => {
-//   console.log("Saved todo", doc)
-// }, (e) => {
-//     console.log("Unable to save todo")
-// });
-
-// var newTodo2 = new Todo({
-//     text: "Read book",
-//     completed: true,
-//     completedAt: 1800
-// });
-
-// newTodo2.save().then((doc) => {
-//     console.log("Saved todo", doc)
-// }, (e) => {
-//     console.log("Unable to save todo")
-// });
