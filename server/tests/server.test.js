@@ -228,9 +228,9 @@ describe('POST/users', () => {
 
               User.findOne({email}).then((user) => {
                   expect(user).toExist();
-                  expect(user.password).notToBe(password);
+                  expect(user.password).toNotBe(password);
                   done();
-              });
+              }).catch((e) => done(e));
            });
    });
    it('should return validation errors if request invalid', (done) => {
